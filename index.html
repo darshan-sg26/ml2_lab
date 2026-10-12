@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>My Lab Programs</title>
+
+  <style>
+    /* body { 
+      font-family: Arial;
+      background: #f4f4f4;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .card {
+      background: white;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    pre {
+      display:none;
+      background: #222;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 8px 12px;
+      border: none;
+      background: #007bff;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }*/
+    body {
+  font-family: Arial;
+  background: #f4f4f4;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+}
+
+.card {
+  background: white;
+  padding: 15px;
+  margin: 15px 0;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Hide the Python code */
+pre {
+  display: none;
+}
+
+/* Arrange all program cards in one row */
+body {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+/* Keep the heading on its own row */
+h1 {
+  width: 100%;
+}
+
+/* Display program cards side by side */
+.card {
+  flex: 1;
+  min-width: 200px;
+  box-sizing: border-box;
+}
+
+button {
+  margin-top: 10px;
+  padding: 8px 12px;
+  border: none;
+  background: #007bff;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #0056b3;
+}
+  </style>
+</head>
+
+<body>
+
+  <h1>Machine Learning - II Lab Programs</h1>
+
+  <!-- PROGRAM 1 -->
+  <div class="card">
+    <h3>Program 1</h3>
+    <pre id="code1">
+import pandas as pd
+
+data = pd.read_csv(input("Enter CSV file name: "))
+X = data.iloc[:, :-1].values
+Y = data.iloc[:, -1].values
+
+S = None
+for i in range(len(X)):
+    if Y[i] == "Yes":
+        if S is None:
+            S = X[i].copy()
+        else:
+            for j in range(len(S)):
+                if S[j] != X[i][j]:
+                    S[j] = '?'
+
+print("\nFind-S Final Hypothesis:")
+print(S)
+
+G = ['?'] * len(S)
+
+for i in range(len(X)):
+    if Y[i] == "No":
+        for j in range(len(S)):
+            if S[j] != '?' and S[j] != X[i][j]:
+                G[j] = S[j]
+
+print("\nSpecific Hypothesis (S):")
+print(S)
+
+print("\nGeneral Hypothesis (G):")
+print(G)
+  </pre>
+    <button onclick="copyCode('code1', this)">Copy Code</button>
+  </div>
+
+  <!-- PROGRAM 2 -->
+  <div class="card">
+    <h3>Program 2</h3>
+    <pre id="code2">
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+from wittgenstein import RIPPER
+
+iris=load_iris()
+X,y=iris.data, iris.target
+
+y_binary =(y==2).astype(int)
+
+X_train, X_test, y_train, y_test = train_test_split(X,y_binary,test_size=0.3,random_state=42)
+
+model = RIPPER()
+model.fit(X_train,y_train,pos_class=1)
+
+print("\nGenerated Rules:\n",model.ruleset_)
+
+y_pred = model.predict(X_test)
+accuracy = accuracy_score(y_test,y_pred)
+print("\nAccuracy",accuracy)
+
+  </pre>
+    <button onclick="copyCode('code2', this)">Copy Code</button>
+  </div>
+
+  <!-- PROGRAM 3 -->
+  <div class="card">
+    <h3>Program 3</h3>
+    <pre id="code3">
+from sklearn.datasets import load_wine
+from sklearn.model_selection import train_test_split 
+from sklearn.ensemble import BaggingClassifier, AdaBoostClassifier 
+from sklearn.tree import DecisionTreeClassifier 
+from sklearn.metrics import accuracy_score
+
+wine = load_wine()
+X,y = wine.data, wine.target
+X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.3,random_state=42)
+
+bagging = BaggingClassifier(estimator=DecisionTreeClassifier(),
+                           n_estimators=50,
+                            random_state=42)
+bagging.fit(X_train,y_train)
+bag_pred = bagging.predict(X_test)
+
+boosting = AdaBoostClassifier(
+estimator = DecisionTreeClassifier(max_depth=1),
+n_estimators=50,
+random_state=42)
+boosting.fit(X_train,y_train)
+boost_pred = boosting.predict(X_test)
+
+print("Bagging Accuracy:",accuracy_score(y_test,bag_pred))
+print("Boosting Accuracy:",accuracy_score(y_test,boost_pred))
+
+  </pre>
+    <button onclick="copyCode('code3', this)">Copy Code</button>
+  </div>
+
+  <!-- PROGRAM 4 -->
+  <div class="card">
+    <h3>Program 4</h3>
+    <pre id="code4">
+import matplotlib.pyplot as plt
+from sklearn.datasets import make_blobs
+from sklearn.cluster import KMeans
+
+X,_ = make_blobs(n_samples=200,centers=3,random_state=42)
+
+kmeans = KMeans(n_clusters=3,random_state=42)
+kmeans.fit(X)
+labels=kmeans.labels_
+
+plt.figure(figsize=(8,6))
+plt.scatter(X[:,0],X[:,1],c=labels,cmap='viridis',s=50)
+
+plt.scatter(
+kmeans.cluster_centers_[:,0],
+kmeans.cluster_centers_[:,1],
+c='red',
+marker='X',
+s=200,
+label='Centroids')
+
+plt.title("KMeans Clustering")
+plt.xlabel("Feature 1")
+plt.ylabel("Feature 2")
+plt.legend()
+plt.grid(True)
+plt.show()
+
+  </pre>
+    <button onclick="copyCode('code4', this)">Copy Code</button>
+  </div>
+
+  <script>
+    function copyCode(id, btn) {
+      const code = document.getElementById(id).innerText;
+
+      navigator.clipboard.writeText(code).then(() => {
+        btn.innerText = "Copied ✅";
+        setTimeout(() => {
+          btn.innerText = "Copy Code";
+        }, 2000);
+      });
+    }
+  </script>
+
+</body>
+
+</html>
